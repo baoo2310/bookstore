@@ -15,21 +15,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 
 @RestController
+@RequestMapping("/api/user")
 public class UserController {
     private UserService userService;
     public UserController(UserService userService){
         this.userService = userService;
     }
-    @GetMapping("/api/user")
+    @GetMapping
     public List<User> getAllUser() {
         return userService.getAllUser();
     }
 
-    @PostMapping({"/api/user", "/api/user/"})
+    @PostMapping
     public ResponseEntity<String> createUser(
         @RequestBody User user
     ){
@@ -38,7 +40,7 @@ public class UserController {
     }
     
 
-    @GetMapping("/api/user/{user-id}")
+    @GetMapping("/{user-id}")
     public ResponseEntity<User> getUserById(
         @PathVariable Integer id
     ) {
@@ -47,7 +49,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/api/user/{user-id}")
+    @DeleteMapping("/{user-id}")
     public ResponseEntity<String> deleteUser(
         @PathVariable Integer id
     ){
@@ -58,18 +60,18 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/api/user/{user-id}/upload")
+    @PostMapping("/{user-id}/upload")
     public ResponseEntity<Book> uploadBook(
-        @PathVariable Integer user_id,
+        @PathVariable("user-id") Integer user_id,
         @RequestBody Book book
     ) {
         return new ResponseEntity<>(userService.uploadBook(user_id, book), HttpStatus.CREATED);
     }
 
-    @PostMapping("/api/user/{user-id}/buy/{book-id}")
+    @PostMapping("/{user-id}/buy/{book-id}")
     public ResponseEntity<String> buyBook(
-        @PathVariable Integer user_id,
-        @PathVariable Long book_id
+        @PathVariable("user-id") Integer user_id,
+        @PathVariable("book-id") Long book_id
     ) {
         userService.buyBook(user_id, book_id);
         return new ResponseEntity<>("Book purchased successfully", HttpStatus.OK);

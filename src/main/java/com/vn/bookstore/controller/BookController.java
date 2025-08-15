@@ -9,23 +9,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.bookstore.model.Book;
 import com.vn.bookstore.service.BookService;
 
+
 @RestController
+@RequestMapping("/api/book")
 public class BookController {
     private BookService bookService;
     public BookController(BookService BookService){
         this.bookService = BookService;
     }
-    @GetMapping("/api/book")
+    @GetMapping
     public List<Book> getAllBook() {
         return bookService.getAllBook();
     }
 
-    @PostMapping({"/api/book", "/api/book/"})
+    @PostMapping
     public ResponseEntity<String> createBook(
         @RequestBody Book book
     ){
@@ -34,18 +37,18 @@ public class BookController {
     }
     
 
-    @GetMapping("/api/book/{book-id}")
+    @GetMapping("/{book-id}")
     public ResponseEntity<Book> getBookById(
-        @PathVariable Long id
+        @PathVariable("book-id") Long id
     ) {
         Book book = bookService.getBookById(id);
         if(book != null) return new ResponseEntity<>(book, HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/api/book/{book-id}")
+    @DeleteMapping("/{book-id}")
     public ResponseEntity<String> deleteBook(
-        @PathVariable Long id
+        @PathVariable("book-id") Long id
     ){
         boolean deleted = bookService.deleteBookById(id);
         if(deleted){
