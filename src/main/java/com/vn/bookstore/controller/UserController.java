@@ -2,6 +2,7 @@ package com.vn.bookstore.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vn.bookstore.model.Book;
 import com.vn.bookstore.model.User;
 import com.vn.bookstore.service.UserService;
 
@@ -37,7 +38,7 @@ public class UserController {
     }
     
 
-    @GetMapping("/api/user/{id}")
+    @GetMapping("/api/user/{user-id}")
     public ResponseEntity<User> getUserById(
         @PathVariable Integer id
     ) {
@@ -46,7 +47,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/api/user/{id}")
+    @DeleteMapping("/api/user/{user-id}")
     public ResponseEntity<String> deleteUser(
         @PathVariable Integer id
     ){
@@ -56,4 +57,23 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @PostMapping("/api/user/{user-id}/upload")
+    public ResponseEntity<Book> uploadBook(
+        @PathVariable Integer user_id,
+        @RequestBody Book book
+    ) {
+        return new ResponseEntity<>(userService.uploadBook(user_id, book), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/api/user/{user-id}/buy/{book-id}")
+    public ResponseEntity<String> buyBook(
+        @PathVariable Integer user_id,
+        @PathVariable Long book_id
+    ) {
+        userService.buyBook(user_id, book_id);
+        return new ResponseEntity<>("Book purchased successfully", HttpStatus.OK);
+    }
+    
+    
 }

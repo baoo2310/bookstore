@@ -3,6 +3,8 @@ package com.vn.bookstore.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,8 +18,27 @@ public class Book {
     private String author;
     private Integer yearPublished;
     private String imgURL;
+    @ManyToOne
+    @JoinColumn(name = "uploader_id")
+    private User uploader;
 
     public Book() {}
+
+    public Long getBook_id() {
+        return book_id;
+    }
+
+    public void setBook_id(Long book_id) {
+        this.book_id = book_id;
+    }
+
+    public User getUploader() {
+        return uploader;
+    }
+
+    public void setUploader(User uploader) {
+        this.uploader = uploader;
+    }
 
     public Book(String bookName, String author, int yearPublished, String imgURL) {
         this.bookName = bookName;

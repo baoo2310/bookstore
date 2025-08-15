@@ -1,10 +1,19 @@
 package com.vn.bookstore.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -21,6 +30,17 @@ public class User {
     private String email;
     @Column
     private int age;
+
+    @OneToMany(mappedBy = "uploader", cascade = CascadeType.ALL)
+    private List<Book> uploadedBooks = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_purchased_books",
+        joinColumns = @JoinColumn(name  = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private Set<Book> purchasedBooks = new HashSet<>();
 
     @OneToOne(
         mappedBy = "user",
@@ -83,6 +103,14 @@ public class User {
 
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
+    }
+
+    public Set<Book> getPurchasedBooks() {
+        return purchasedBooks;
+    }
+
+    public void setPurchasedBooks(Set<Book> purchasedBooks) {
+        this.purchasedBooks = purchasedBooks;
     }
 
     public String toString(){
